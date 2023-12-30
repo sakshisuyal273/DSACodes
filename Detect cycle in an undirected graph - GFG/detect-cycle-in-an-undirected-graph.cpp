@@ -6,38 +6,28 @@ using namespace std;
 class Solution {
   public:
     // Function to detect cycle in an undirected graph.
-    bool detect(int src, int vis[], vector<int> adj[]) {
+    bool detect(int src, int parent, int vis[], vector<int> adj[]) {
         vis[src]=1;
-        queue<pair<int,int>> q;
-        q.push({src, -1});
-        while(!q.empty()) {
-            int node = q.front().first;
-            int parent = q.front().second;
-            q.pop();
-            for(auto it : adj[node]) {
-                if(!vis[it]){
-                    vis[it]=1;
-                    q.push({it,node});
-
-                }
-                else if(it != parent){
-                    return true;
-                }
+        for(auto it : adj[src]){
+            if(!vis[it]){
+                if(detect(it, src,  vis, adj) ==true) return true;
+            }
+            else if(it != parent){
+                return true;
             }
         }
         return false;
     }
     bool isCycle(int V, vector<int> adj[]) {
         // Code here
-        int vis[V]={0};
+        int vis[V] = {0};
         for(int i=0; i<V; i++) {
             if(!vis[i]){
-                if(detect(i, vis, adj)) return true;
+                if(detect(i, -1, vis, adj)) return true;
             }
         }
         return false;
     }
-    
 };
 
 //{ Driver Code Starts.
