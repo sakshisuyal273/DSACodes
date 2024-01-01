@@ -10,45 +10,40 @@ using namespace std;
 
 class Solution {
   public:
-    bool dfs(int node, int vis[], int pathVis[], int check[], vector<int> adj[]) {
-        vis[node]=1;
-        pathVis[node]=1;
-        check[node]=0;
-        for(auto it : adj[node]){
-            if(!vis[it]){
-                if(dfs(it, vis, pathVis, check, adj)==true){
-                    check[node]=0;
-                    return true;
-                }
-            }
-            else if(pathVis[it]){
-                check[node]=0;
-                return true;
-            }
-        }
-        
-        check[node]=1;
-        pathVis[node]=0;
-        return false;
-    }
     vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
         // code here
-        int vis[V]={0};
-        int pathVis[V]={0};
-        int check[V]={0};
-        for(int i=0; i<V; i++) {
-            if(!vis[i]){
-                dfs(i, vis, pathVis, check, adj);
+        vector<int> adjls[V];
+        for(int i=0; i<V; i++){
+            for(auto it : adj[i]){
+                adjls[it].push_back(i);
             }
         }
-        vector<int> safeNode;
+        vector<int> safenode;
+        int ind[V]={0};
         for(int i=0; i<V; i++) {
-            if(check[i]==1){
-                safeNode.push_back(i);
+            for(auto it: adjls[i]){
+                ind[it]++;
             }
         }
-        return safeNode;
-        
+        queue<int> q;
+        for(int i=0; i<V; i++) {
+            if(ind[i]==0){
+                q.push(i);
+            }
+        }
+        while(!q.empty()) {
+            int node= q.front();
+            q.pop();
+            safenode.push_back(node);
+            for(auto it : adjls[node]) {
+                ind[it]--;
+                if(ind[it]==0){
+                    q.push(it);
+                }
+            }
+        }
+        sort(safenode.begin(), safenode.end());
+        return safenode;
     }
 };
 
