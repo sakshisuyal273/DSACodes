@@ -13,18 +13,21 @@ class Solution {
     vector<int> eventualSafeNodes(int V, vector<int> adj[]) {
         // code here
         vector<int> adjls[V];
+        int ind[V]={0};
         for(int i=0; i<V; i++){
             for(auto it : adj[i]){
                 adjls[it].push_back(i);
+                ind[i]++;
             }
         }
         vector<int> safenode;
-        int ind[V]={0};
-        for(int i=0; i<V; i++) {
-            for(auto it: adjls[i]){
-                ind[it]++;
-            }
-        }
+        // int ind[V]={0};
+        // for(int i=0; i<V; i++) {
+        //     for(auto it: adjls[i]){
+        //         ind[it]++;
+                
+        //     }
+        // }
         queue<int> q;
         for(int i=0; i<V; i++) {
             if(ind[i]==0){
